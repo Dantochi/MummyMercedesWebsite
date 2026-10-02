@@ -128,4 +128,99 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // 7. Biography Portrait Slideshow (Automatic with Touch Swipe & Controls)
+  const bioSlideshow = document.getElementById('bioSlideshow');
+  const bioTrack = document.getElementById('bioSlidesTrack');
+  const bioDots = document.querySelectorAll('.bio-dot');
+  const bioPrevBtn = document.getElementById('bioSlidePrev');
+  const bioNextBtn = document.getElementById('bioSlideNext');
+
+  if (bioSlideshow && bioTrack && bioDots.length > 0) {
+    let currentBioSlide = 0;
+    const totalBioSlides = bioDots.length;
+    let bioSlideTimer = null;
+    const slideDuration = 4000;
+
+    function goToBioSlide(idx) {
+      currentBioSlide = (idx + totalBioSlides) % totalBioSlides;
+      bioTrack.style.transform = `translateX(-${currentBioSlide * 100}%)`;
+      bioDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentBioSlide);
+      });
+    }
+
+    function nextBioSlide() {
+      goToBioSlide(currentBioSlide + 1);
+    }
+
+    function prevBioSlide() {
+      goToBioSlide(currentBioSlide - 1);
+    }
+
+    function startBioSlideTimer() {
+      stopBioSlideTimer();
+      bioSlideTimer = setInterval(nextBioSlide, slideDuration);
+    }
+
+    function stopBioSlideTimer() {
+      if (bioSlideTimer) {
+        clearInterval(bioSlideTimer);
+        bioSlideTimer = null;
+      }
+    }
+
+    // Prev / Next button listeners
+    if (bioPrevBtn) {
+      bioPrevBtn.addEventListener('click', () => {
+        prevBioSlide();
+        startBioSlideTimer();
+      });
+    }
+
+    if (bioNextBtn) {
+      bioNextBtn.addEventListener('click', () => {
+        nextBioSlide();
+        startBioSlideTimer();
+      });
+    }
+
+    // Dot indicators
+    bioDots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const targetIdx = parseInt(dot.getAttribute('data-slide'), 10);
+        if (!isNaN(targetIdx)) {
+          goToBioSlide(targetIdx);
+          startBioSlideTimer();
+        }
+      });
+    });
+
+    // Touch swipe support (Mobile)
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    bioSlideshow.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      stopBioSlideTimer();
+    }, { passive: true });
+
+    bioSlideshow.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeDistance = touchEndX - touchStartX;
+      if (swipeDistance < -40) {
+        nextBioSlide();
+      } else if (swipeDistance > 40) {
+        prevBioSlide();
+      }
+      startBioSlideTimer();
+    }, { passive: true });
+
+    // Pause on desktop mouse hover, resume on mouse leave
+    bioSlideshow.addEventListener('mouseenter', stopBioSlideTimer);
+    bioSlideshow.addEventListener('mouseleave', startBioSlideTimer);
+
+    // Initialize auto play
+    startBioSlideTimer();
+  }
 });

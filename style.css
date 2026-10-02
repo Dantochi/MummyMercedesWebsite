@@ -909,13 +909,113 @@ a {
 
 .bio-portrait-box {
   position: relative;
+  width: 100%;
 }
 
-.bio-portrait-box img {
+.bio-slideshow-container {
+  position: relative;
   width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
   border-radius: 2px;
-  filter: grayscale(100%) contrast(105%);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+  background-color: #1a1a1a;
+  z-index: 1;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+
+.bio-slides-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.bio-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.bio-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: grayscale(100%) contrast(105%);
+  transition: filter 0.4s ease, transform 0.6s ease;
+}
+
+.bio-slideshow-container:hover .bio-slide img {
+  filter: grayscale(0%) contrast(102%);
+}
+
+.bio-slideshow-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
+  z-index: 3;
+}
+
+.bio-slideshow-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bio-dot.active {
+  background: #ffffff;
+  width: 22px;
+  border-radius: 10px;
+}
+
+.bio-nav-btn {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+}
+
+.bio-nav-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.bio-nav-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
 .bio-frame-accent {
