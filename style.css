@@ -186,6 +186,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.16em;
   color: var(--color-text-muted);
+  text-transform: uppercase;
   margin-top: 4px;
   text-align: center;
 }
